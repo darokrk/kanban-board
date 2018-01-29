@@ -1,10 +1,10 @@
 // tworzymy funkcje konstruujaca klase Column
 
-	function Column(name) {
+	function Column(id, name) {
 		var self = this;
 
-		this.id = randomString();
-		this.name = name;
+		this.id = id;
+		this.name = name || "Empty Column";
 		this.$element = createColumn();
 
 		// tworzymy kolumne
@@ -25,15 +25,27 @@
 
 			// dodaj notatke po kliknieciu w przycisk
 
-			$columnAddCard.click(function() {
-				var card = prompt("Enter the name of the card");
-				if (card) {
-					self.addCard(new Card(card));
-				}
-				else if (card.length === 0){
-					self.addCard(new Card(card));
-				}
-			});	
+			$columnAddCard.click(function(event) {
+				var cardName = prompt("Enter the name of the card");
+				event.preventDefault();
+				$.ajax({
+    				url: baseUrl + '/card',
+    				method: 'POST',
+    				data: {
+    				name: cardName,
+    				bootcamp_kanban_column_id: self.id
+    				},
+    				success: function(response) {
+    					if (cardName) {
+        					var card = new Card(response.id, cardName);
+        					self.addCard(card);
+        				}
+        				else if (cardName.length === 0) {
+        					self.addCard(new Card(name));
+        				}
+    				}
+				});
+			});
 
 			// konstruowanie kolumny
 
@@ -53,6 +65,13 @@
 			this.$element.children('ul').append(card.$element);
 		},
 		removeColumn: function() {
-			this.$element.remove();
-		}
-	};
+			var self = this;
+			$.ajax({
+      			url: baseUrl + '/column/' + self.id,
+      			method: 'DELETE',
+      			success: function(response){
+        		self.$element.remove();
+      		}
+    	});
+ 		}
+ 	};

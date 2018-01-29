@@ -1,36 +1,33 @@
-$(function() {
-	
-	// generujemy unikalne ID aby nie bylo duplikatow
 
-	function randomString() {
-		var chars = '0123456789abcdefghiklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXTZ';
-		var str = '';
-		for (var i = 0; i < 10; i++) {
-			str += chars[Math.floor(Math.random() * chars.length)];
-		}
-		return str;
-	}
+var baseUrl = 'https://kodilla.com/pl/bootcamp-api';
+var myHeaders = {
+  'X-Client-Id': 2820,
+  'X-Auth-Token': 'b0105764a59b3d196d666f004cc18ed6'
+};
 
-// tworzenie elementow w kanbanie
+$.ajaxSetup({
+	headers: myHeaders
+});
 
-// kolumny
+$.ajax({
+    url: baseUrl + '/board',
+    method: 'GET',
+    success: function(response) {
+      setupColumns(response.columns);
+    }
+});
 
-var todoColumn = new Column('To do');
-var doingColumn = new Column('Doing');
-var doneColumn = new Column('Done');
+function setupColumns(columns) {
+	columns.forEach(function(column) {
+		var col = new Column(column.id, column.name);
+		board.addColumn(col);
+		setupCards(col, column.cards);
+	});
+}
 
-// dodanie kolumn do tablicy
-
-board.addColumn(todoColumn);
-board.addColumn(doingColumn);
-board.addColumn(doneColumn);
-
-// tworzenie kart
-
-var card1 = new Card('New task');
-var card2 = new Card('Create kanban boards');
-
-// dodanie kart do kolumn
-
-todoColumn.addCard(card1);
-doingColumn.addCard(card2);
+function setupCards(col, cards) {
+	cards.forEach(function (card) {
+        var card = new Card(card.id, card.name, card.bootcamp_kanban_column_id);
+    	col.addCard(card);
+  	});
+}

@@ -1,17 +1,17 @@
 // tworzymy funkcje konstruujaca klase Card
 
-	function Card(description) {
+	function Card(id, name) {
 		var self = this;
 
-		this.id = randomString();
-		this.description = description;
+		this.id = id;
+		this.name = name || 'Empty Card';
 		this.$element = createCard();
 
 		// tworzymy karte
 
 		function createCard() {
 			var $card = $('<li>').addClass('card');
-			var $cardDescription = $('<p>').addClass('card-description').text(self.description);
+			var $cardDescription = $('<p>').addClass('card-description').text(self.name);
 			var $cardDelete = $('<button>').addClass('btn-delete').text('x');
 
 			// kasowanie karty po kliknieciu w przycisk(wewnatrz metody createCard())
@@ -34,17 +34,13 @@
 
 	Card.prototype = {
 		removeCard: function() {
-			this.$element.remove();
+			var self = this;
+    		$.ajax({
+      			url: baseUrl + '/card/' + self.id,
+      			method: 'DELETE',
+      			success: function(){
+        			self.$element.remove();
+      			}
+    		});
 		}
-	};
-
-	// tworzymy obiekt tablicy i przypinamy nasluchiwanie zdarzen
-
-	var board = {
-		name: 'Kanban Board',
-		addColumn: function(column) {
-			this.$element.append(column.$element);
-			initSortable();
-		},
-		$element: $('#board .column-container')
 	};

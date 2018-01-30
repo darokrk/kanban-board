@@ -32,15 +32,15 @@
     				url: baseUrl + '/card',
     				method: 'POST',
     				data: {
-    				name: cardName,
-    				bootcamp_kanban_column_id: self.id
+    					name: cardName,
+    					bootcamp_kanban_column_id: self.id
     				},
     				success: function(response) {
     					if (cardName) {
         					var card = new Card(response.id, cardName);
         					self.addCard(card);
         				}
-        				else if (cardName.length === 0) {
+        				else if (!cardName.length) {
         					self.addCard(new Card(name));
         				}
     				}
@@ -70,8 +70,8 @@
       			url: baseUrl + '/column/' + self.id,
       			method: 'DELETE',
       			success: function(response){
-        		self.$element.remove();
-      		}
-    	});
+        			self.$element.remove();
+      			}
+    		});
  		}
  	};

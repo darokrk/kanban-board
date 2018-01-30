@@ -2,25 +2,16 @@
 
 	var board = {
 		name: 'Kanban Board',
-		addColumn: function(column) {
+		createColumn: function(column) {
 			this.$element.append(column.$element);
 			initSortable();
 		},
 		$element: $('#board .column-container')
 	};
 
-	
-	// implementacja funkcji initSortable(drag and drop)
-
-	function initSortable() {
-		$('.column-card-list').sortable({
-			connectWith: '.column-card-list',
-			placeholder: 'card-placeholder'
-		}).disableSelection();
-	}
-
 	// podpiecie do przycisku tablicy wrzucanie nowej kolumny do tablicy
 
+/*
 	$('.create-column')
     .click(function() {
         var columnName = prompt('Enter a column name');
@@ -41,3 +32,37 @@
           	}
         });
 	});
+*/
+
+	$('.create-column').click(function() {
+			var name = prompt('Enter a column name');
+				if (name)	{
+					createAjaxColumn();
+				}
+				else if (name.length === 0) {
+					createAjaxColumn("Empty Column");
+				}
+		});
+
+	function createAjaxColumn(columnName) {
+		$.ajax({
+			url: baseUrl + '/column',
+			method: 'POST',
+			data: {
+				name: columnName
+			},
+			success: function(response) {
+				var column = new Column(response.id, columnName);
+				board.createColumn(column);
+			}
+		});
+	}
+
+	// implementacja funkcji initSortable(drag and drop)
+
+	function initSortable() {
+		$('.column-card-list').sortable({
+			connectWith: '.column-card-list',
+			placeholder: 'card-placeholder'
+		}).disableSelection();
+	}

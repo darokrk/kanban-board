@@ -41,7 +41,7 @@
         					self.addCard(card);
         				}
         				else if (!cardName.length) {
-        					self.addCard(new Card(name));
+        					self.addCard(new Card(response.id, name));
         				}
     				}
 				});

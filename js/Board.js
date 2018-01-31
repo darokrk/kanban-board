@@ -37,7 +37,7 @@
 	$('.create-column').click(function() {
 			var name = prompt('Enter a column name');
 				if (name)	{
-					createAjaxColumn();
+					createAjaxColumn(name);
 				}
 				else if (name.length === 0) {
 					createAjaxColumn("Empty Column");

@@ -41,7 +41,7 @@
         					self.addCard(card);
         				}
         				else if (!cardName.length) {
-        					self.addCard(new Card(response.id, name));
+        					self.addCard(new Card(response.id, 'Empty Card'));
         				}
     				}
 				});

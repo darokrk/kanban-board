@@ -1,46 +1,35 @@
-// tworzymy funkcje konstruujaca klase Card
+function Card(id, name) {
+	var self = this;
 
-	function Card(id, name) {
-		var self = this;
+	this.id = id;
+	this.name = name || 'Empty Card';
+	this.$element = createCard();
 
-		this.id = id;
-		this.name = name || 'Empty Card';
-		this.$element = createCard();
+	function createCard() {
+		var $card = $('<li>').addClass('card');
+		var $cardDescription = $('<p>').addClass('card-description').text(self.name);
+		var $cardDelete = $('<button>').addClass('btn-delete').text('x');
 
-		// tworzymy karte
+		$cardDelete.click(function () {
+			self.removeCard();
+		});
 
-		function createCard() {
-			var $card = $('<li>').addClass('card');
-			var $cardDescription = $('<p>').addClass('card-description').text(self.name);
-			var $cardDelete = $('<button>').addClass('btn-delete').text('x');
+		$card.append($cardDelete)
+			.append($cardDescription);
 
-			// kasowanie karty po kliknieciu w przycisk(wewnatrz metody createCard())
-
-			$cardDelete.click(function() {
-				self.removeCard();
-			});
-
-		// konstruujemy karte(wewnatrz metody createCard())
-		
-			$card.append($cardDelete)
-					.append($cardDescription);
-
-			return $card;
-
-		}
+		return $card;
 	}
+}
 
-	// dodanie prototypu
-
-	Card.prototype = {
-		removeCard: function() {
-			var self = this;
-    		$.ajax({
-      			url: baseUrl + '/card/' + self.id,
-      			method: 'DELETE',
-      			success: function(response){
-        			self.$element.remove();
-      			}
-    		});
-		}
-	};
+Card.prototype = {
+	removeCard: function () {
+		var self = this;
+		$.ajax({
+			url: baseUrl + '/card/' + self.id,
+			method: 'DELETE',
+			success: function (response) {
+				self.$element.remove();
+			}
+		});
+	}
+};

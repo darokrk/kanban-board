@@ -1,2 +1,2 @@
-# zadanie_12_7
+# kanban-board
 https://darokrk.github.io/kanban-board
